@@ -1,15 +1,31 @@
 # Tasks
 
-# Muhannad: Person 5 & 6 & 7
+### Muhannad: 
 
-# Mohammed: Person 5 & 6 & 7
+- Person 5 (Pull Requests)
 
-# Akshath: Person 5 & 6 & 7
+### Mohammed: 
 
-# Daniyal: Branch D (Person 4)
+- Person 6 (Pull Requests)
 
-# Fahim: Branch B (Person 2)
+### Akshath: 
 
-# Alex: Branch C (person 3)
+- Person 7 (Pull Requests)
+- Git Flow Diagram
 
-# Angel: Branch A (Person 1)
+### Daniyal: 
+
+- Branch D (Person 4)
+
+### Fahim: 
+
+- Branch B (Person 2)
+
+### Alex: 
+
+- Branch C (person 3)
+
+### Angel: 
+
+- Branch A (Person 1)
+- Git Flow Diagram
