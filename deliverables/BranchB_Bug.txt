@@ -1,0 +1,1 @@
+Implemented deletion in server, as code was completely missing. Nothing was done for the front-end.
