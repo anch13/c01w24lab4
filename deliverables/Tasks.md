@@ -1,15 +1,15 @@
 # Tasks
 
-# Muhannad
+# Muhannad: Person 5 & 6 & 7
 
-# Mohammed
+# Mohammed: Person 5 & 6 & 7
 
-# Akshath
+# Akshath: Person 5 & 6 & 7
 
-# Daniyal
+# Daniyal: Branch D (Person 4)
 
-# Fahim
+# Fahim: Branch B (Person 2)
 
-# Alex
+# Alex: Branch C (person 3)
 
-# Angel
+# Angel: Branch A (Person 1)
