@@ -24,13 +24,14 @@ export default Note;
 
 const NoteStyle = {
     note: {
+      backgroundColor : 'orange',
       padding: '20px',
       margin: '20px',
       width: '200px',
       borderStyle: 'dotted',
       borderRadius: '30px',
       borderWidth: 'thin',
-      overflowWrap: "break-word"
+      overflowWrap: "break-word",
     },
     text: {
       margin: "0px"
