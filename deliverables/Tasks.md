@@ -3,6 +3,7 @@
 ### Muhannad: 
 
 - Person 5 (Pull Requests)
+- Tasks.md
 
 ### Mohammed: 
 
@@ -24,6 +25,7 @@
 ### Alex: 
 
 - Branch C (person 3)
+- Tasks.md
 
 ### Angel: 
 
