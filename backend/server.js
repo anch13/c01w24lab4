@@ -4,7 +4,7 @@ import cors from "cors";
 
 const app = express();
 const PORT = 4000;
-const mongoURL = "mongodb://localhost:27017";
+const mongoURL = "mongodb://127.0.0.1:27017";
 const dbName = "quirknotes";
 
 // Connect to MongoDB
@@ -27,15 +27,15 @@ connectToMongo();
 
 // Open Port
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 app.use(cors());
 
 // Collections to manage
 const COLLECTIONS = {
-    notes: "notes",
-  };
+  notes: "notes",
+};
 
 
 // Get all notes available
@@ -46,46 +46,69 @@ app.get("/getAllNotes", express.json(), async (req, res) => {
     const data = await collection.find().toArray();
     res.json({ response: data });
   } catch (error) {
-    res.status(500).json({error: error.message})
+    res.status(500).json({ error: error.message })
   }
 })
-  
+
 // Post a note
 app.post("/postNote", express.json(), async (req, res) => {
-    try {
-      // Basic body request check
-      const { title, content } = req.body;
-      if (!title || !content) {
-        return res
-          .status(400)
-          .json({ error: "Title and content are both required." });
-      }
-  
-      // Send note to database
-      const collection = db.collection(COLLECTIONS.notes);
-      const result = await collection.insertOne({
-        title,
-        content,
-      });
-      res.json({
-        response: "Note added succesfully.",
-        insertedId: result.insertedId,
-      });
+  try {
+    // Basic body request check
+    const { title, content } = req.body;
+    const createdAt = new Date();
 
-
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (!title || !content) {
+      return res
+        .status(400)
+        .json({ error: "Title and content are both required." });
     }
-  });
+
+    // Send note to database
+    const collection = db.collection(COLLECTIONS.notes);
+    const result = await collection.insertOne({
+      title,
+      content,
+      createdAt
+    });
+    res.json({
+      response: "Note added succesfully.",
+      insertedId: result.insertedId,
+    });
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Delete a note
 app.delete("/deleteNote/:noteId", express.json(), async (req, res) => {
   const { noteId } = req.params;
+  try {
+    console.log(`Attempting to delete note with ID: ${noteId}`);
+    // Basic body request check
+    const { title, content } = req.body;
+    if (!ObjectId.isValid(noteId)) {
+      return res
+        .status(400)
+        .json({ error: "Invalid note id requested" });
+    }
 
-  console.log(`Attempting to delete note with ID: ${noteId}`);
-  res.status(500).json({ error: "Failed to delete note due to internal server error." });
+    // Send note to database
+    const collection = db.collection(COLLECTIONS.notes);
+    const result = await collection.deleteOne({
+      _id: new ObjectId(noteId)
+    });
+    res.json({
+      response: "Note added succesfully.",
+      insertedId: result.insertedId,
+    });
+
+
+  } catch (err) {
+    res.status(500).json({ error: `Failed to delete note due to internal server error: ${err}` });
+  }
 });
-  
+
 // Patch a note
 app.patch("/patchNote/:noteId", express.json(), async (req, res) => {
   try {
@@ -103,15 +126,15 @@ app.patch("/patchNote/:noteId", express.json(), async (req, res) => {
         .json({ error: "Must have at least one of title or content." });
     }
 
-    
+
     // Find note with given ID
     const collection = db.collection(COLLECTIONS.notes);
     const data = await collection.updateOne({
       _id: new ObjectId(noteId),
     }, {
       $set: {
-        ...(title && {title}),
-        ...(content && {content})
+        ...(title && { title }),
+        ...(content && { content })
       }
     });
 
@@ -122,7 +145,7 @@ app.patch("/patchNote/:noteId", express.json(), async (req, res) => {
     }
     res.json({ response: `Document with ID ${noteId} patched.` });
   } catch (error) {
-    res.status(500).json({error: error.message})
+    res.status(500).json({ error: error.message })
   }
 })
 
@@ -136,3 +159,20 @@ app.delete("/deleteAllNotes", express.json(), async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 })
+
+app.patch('/updateNoteColor/:noteId', express.json(), async (req, res) => {
+  const { noteId } = req.params;
+  const { color } = req.body;
+
+  if (!ObjectId.isValid(noteId)) {
+    return res.status(400).json({ error: "Invalid note ID." });
+  }
+
+  try {
+    const collection = db.collection('notes');
+    await collection.updateOne({ _id: new ObjectId(noteId) }, { $set: { color } });
+    res.json({ message: 'Note color updated successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
