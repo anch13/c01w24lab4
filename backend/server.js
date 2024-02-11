@@ -4,7 +4,7 @@ import cors from "cors";
 
 const app = express();
 const PORT = 4000;
-const mongoURL = "mongodb://localhost:27017";
+const mongoURL = "mongodb://127.0.0.1:27017";
 const dbName = "quirknotes";
 
 // Connect to MongoDB
@@ -81,9 +81,30 @@ app.post("/postNote", express.json(), async (req, res) => {
 // Delete a note
 app.delete("/deleteNote/:noteId", express.json(), async (req, res) => {
   const { noteId } = req.params;
+  try {
+    console.log(`Attempting to delete note with ID: ${noteId}`);
+    // Basic body request check
+    const { title, content } = req.body;
+    if (!ObjectId.isValid(noteId)) {
+      return res
+        .status(400)
+        .json({ error: "Invalid note id requested" });
+    }
 
-  console.log(`Attempting to delete note with ID: ${noteId}`);
-  res.status(500).json({ error: "Failed to delete note due to internal server error." });
+    // Send note to database
+    const collection = db.collection(COLLECTIONS.notes);
+    const result = await collection.deleteOne({
+      _id: new ObjectId(noteId)
+    });
+    res.json({
+      response: "Note added succesfully.",
+      insertedId: result.insertedId,
+    });
+
+
+  } catch (err) {
+    res.status(500).json({ error: `Failed to delete note due to internal server error: ${err}` });
+  }
 });
 
 // Patch a note
